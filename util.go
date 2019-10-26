@@ -14,7 +14,9 @@ var (
 	lg    = zap.L()
 	level = "debug"
 
-	ErrInternal = errors.New("error internal")
+	ErrInternal       = errors.New("error internal")
+	ErrInvalid        = errors.New("error invalid operation")
+	ErrNotImplemented = errors.New("error not implemeted yet")
 )
 
 func initLogger() {
