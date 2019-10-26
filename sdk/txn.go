@@ -1,7 +1,19 @@
 // package sdk defined spanner sdk for tikv transection
 package sdk
 
-// Transection defiend spanner transection interface, implemented by ro transection and rw transection
-type Transection interface{}
+// Value defined a byte slice for transection sdk value field
+type Value []byte
 
-func Begin()
+// Transection defiend spanner transection interface, implemented by ro transection and rw transection
+type Transection interface {
+	Get(key Key) (Value, error)
+	Set(key Key) (Value, error)
+	Delete(key Key) (Value, error)
+	Rollback() error
+	Commit() error
+}
+
+// Begin start a transection with option wether it is a RO transection
+func Begin(ro bool) (Transection, error) {
+	return nil, nil
+}
