@@ -1,35 +1,37 @@
 package sdk
 
 import (
-	"errors"
 	"context"
+	"errors"
+
 	"github.com/distributedio/kvproto/pkg/spannerpb"
 	"google.golang.org/grpc"
 )
 
 var (
-	ErrNotFound = errors.New("not found")
+	ErrNotFound    = errors.New("not found")
 	ErrRegionError = errors.New("region error")
 )
 
 type Type int
-const (
-	OpPut Type = 0;
-	OpDelete Type = 1;
-	OpRead Type = 2;
 
-	ErrorCode_NotFound = 1;
-	ErrorCode_RegionError = 2;
+const (
+	OpPut    Type = 0
+	OpDelete Type = 1
+	OpRead   Type = 2
+
+	ErrorCode_NotFound    = 1
+	ErrorCode_RegionError = 2
 )
 
 type Operation struct {
-	Type Type
-	Key []byte
+	Type  Type
+	Key   []byte
 	Value []byte
 }
 
-type TiKVClient interface{
-	Get(ctx context.Context, txnID uint64, key []byte, version uint64, readOnly bool)([]byte, error)
+type TiKVClient interface {
+	Get(ctx context.Context, txnID uint64, key []byte, version uint64, readOnly bool) ([]byte, error)
 	Commit(ctx context.Context, txnID uint64, operations []Operation, coordinatorId []byte, participants [][]byte) (uint64, error)
 	HeartBeat(ctx context.Context, txnID uint64, ttl uint64) error
 	Close() error
@@ -37,7 +39,7 @@ type TiKVClient interface{
 
 type tikvClient struct {
 	conn *grpc.ClientConn
-	cli spannerpb.SpannerClient
+	cli  spannerpb.SpannerClient
 }
 
 func NewTiKV(address string) (TiKVClient, error) {
@@ -49,15 +51,15 @@ func NewTiKV(address string) (TiKVClient, error) {
 
 	return &tikvClient{
 		conn: conn,
-		cli:cli,
+		cli:  cli,
 	}, nil
 }
 
-func (kv *tikvClient) Get(ctx context.Context, txnID uint64, key []byte, version uint64, readOnly bool)([]byte, error) {
+func (kv *tikvClient) Get(ctx context.Context, txnID uint64, key []byte, version uint64, readOnly bool) ([]byte, error) {
 	req := &spannerpb.GetRequest{
-		TxnId: txnID,
-		Key: key,
-		Version: version,
+		TxnId:    txnID,
+		Key:      key,
+		Version:  version,
 		ReadOnly: readOnly,
 	}
 	var resp *spannerpb.GetResponse
@@ -73,16 +75,16 @@ func (kv *tikvClient) Get(ctx context.Context, txnID uint64, key []byte, version
 	return resp.Value, nil
 }
 
-func (kv *tikvClient)Commit(ctx context.Context, txnID uint64, operations []Operation, coordinatorId []byte, participantIDs [][]byte) (uint64, error) {
+func (kv *tikvClient) Commit(ctx context.Context, txnID uint64, operations []Operation, coordinatorId []byte, participantIDs [][]byte) (uint64, error) {
 	req := &spannerpb.CommitRequest{
-		TxnId: txnID,
-		CoordinatorId: coordinatorId,
+		TxnId:          txnID,
+		CoordinatorId:  coordinatorId,
 		ParticipantIds: participantIDs,
 	}
 
 	for i := range operations {
 		op := &spannerpb.Operation{
-			Key: operations[i].Key,
+			Key:   operations[i].Key,
 			Value: operations[i].Value,
 		}
 		switch operations[i].Type {
@@ -112,10 +114,10 @@ func (kv *tikvClient)Commit(ctx context.Context, txnID uint64, operations []Oper
 	return resp.Version, nil
 }
 
-func (kv *tikvClient)HeartBeat(ctx context.Context, txnID uint64, ttl uint64) error {
+func (kv *tikvClient) HeartBeat(ctx context.Context, txnID uint64, ttl uint64) error {
 	req := &spannerpb.HeartBeatRequest{
-		TxnId:txnID,
-		Ttl:ttl,
+		TxnId: txnID,
+		Ttl:   ttl,
 	}
 	var resp *spannerpb.HeartBeatResponse
 	resp, err := kv.cli.HeartBeat(ctx, req)

@@ -6,7 +6,7 @@ import "time"
 // Pacemaker sent heartbeat to every perticapate nodes
 type Pacemaker struct {
 	cli      string
-	nodes    []string
+	kvnodes  []*tikvClient
 	interval time.Duration
 	ctx      chan int
 }
@@ -16,12 +16,11 @@ func NewPacemaker(pdcli string) *Pacemaker {
 	return &Pacemaker{}
 }
 
-// Close stop heat the node
-func (p *Pacemaker) Close() {}
+// close stop heat the node
+func (p *Pacemaker) close() {}
 
 // AddNode add new node
 func (p *Pacemaker) AddNode() {}
 
 // do heartbeat
-func (p *Pacemaker) heartbeat() {
-}
+func (p *Pacemaker) heartbeat() {}

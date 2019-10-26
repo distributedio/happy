@@ -2,19 +2,18 @@
 package sdk
 
 // Key give out spanner sdk key
-type Key struct {
-	Value []byte
-}
-
-func WarpKey(rk, op string) *Key {
-	return &Key{}
-}
+type Key string
 
 // Value defined a byte slice for transection sdk value field
 type Value struct {
-	Type Type
+	Type  Type
 	Value []byte
 }
+
+func warpKV(rk, op string) *Opreation {
+	return &Operation{}
+}
+
 // KeyStore store all keys locally
 // TODO should be an interface
 type KeyStore struct {
@@ -31,6 +30,6 @@ func (s *KeyStore) Get(k Key) Value {
 func (s *KeyStore) Delete(k Key) {
 }
 
-func (s *KeyStore) Getall() ([]Key, []Value) {
-	return nil, nil
+func (s *KeyStore) GetAllOperations() []*Operation {
+	return nil
 }
