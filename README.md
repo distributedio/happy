@@ -1,6 +1,6 @@
 # TiKV Spanner transaction interface SDK
 
-## RO/RW Transection lifetime
+## RO/RW Transaction lifetime
 
 ### Begin()
 * do nothing, gen txn struct with RO/RW
