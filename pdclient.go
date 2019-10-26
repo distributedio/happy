@@ -3,12 +3,18 @@ package sdk
 
 import (
 	"os"
+	"time"
 
 	pd "github.com/pingcap/pd/client"
+	"github.com/pingcap/tidb/store/tikv/oracle"
+	"github.com/pingcap/tidb/store/tikv/oracle/oracles"
 	"go.uber.org/zap"
 )
 
-var pdClient pd.Client
+var (
+	pdClient     pd.Client
+	oracleClient oracle.Oracle
+)
 
 func initPDclient(addrs []string) {
 	var err error
@@ -21,4 +27,9 @@ func initPDclient(addrs []string) {
 		os.Exit(0)
 	}
 	lg.Info("init pd client", zap.Strings("addrs", addrs))
+
+	oracleClient, err = oracles.NewPdOracle(pdClient, time.Second)
+	if err != nil {
+		os.Exit(0)
+	}
 }

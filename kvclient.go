@@ -2,6 +2,7 @@ package sdk
 
 import (
 	"context"
+	"encoding/binary"
 	"errors"
 
 	"github.com/distributedio/kvproto/pkg/spannerpb"
@@ -32,7 +33,7 @@ type Operation struct {
 
 type TiKVClient interface {
 	Get(ctx context.Context, txnID uint64, key []byte, version uint64, readOnly bool) ([]byte, error)
-	Commit(ctx context.Context, txnID uint64, operations []Operation, coordinatorId []byte, participants [][]byte) (uint64, error)
+	Commit(ctx context.Context, txnID uint64, operations []Operation, coordinatorId uint64, participants []uint64) (uint64, error)
 	HeartBeat(ctx context.Context, txnID uint64, ttl uint64) error
 	Close() error
 }
@@ -75,11 +76,21 @@ func (kv *tikvClient) Get(ctx context.Context, txnID uint64, key []byte, version
 	return resp.Value, nil
 }
 
-func (kv *tikvClient) Commit(ctx context.Context, txnID uint64, operations []Operation, coordinatorId []byte, participantIDs [][]byte) (uint64, error) {
+func (kv *tikvClient) Commit(ctx context.Context, txnID uint64, operations []Operation, coordinatorId uint64, participantIDs []uint64) (uint64, error) {
+	lid := make([]byte, 8)
+	binary.BigEndian.PutUint64(lid, coordinatorId)
+
+	ids := make([][]byte, 0, 0xF)
+	for _, v := range participantIDs {
+		id := make([]byte, 8)
+		binary.BigEndian.PutUint64(id, v)
+		ids = append(ids, id)
+	}
+
 	req := &spannerpb.CommitRequest{
 		TxnId:          txnID,
-		CoordinatorId:  coordinatorId,
-		ParticipantIds: participantIDs,
+		CoordinatorId:  lid,
+		ParticipantIds: ids,
 	}
 
 	for i := range operations {
