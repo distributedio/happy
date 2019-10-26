@@ -8,6 +8,7 @@ type Pacemaker struct {
 	cli      string
 	nodes    []string
 	interval time.Duration
+	ctx      chan int
 }
 
 // NewPacemaker gen a pacemaker client
@@ -22,4 +23,5 @@ func (p *Pacemaker) Close() {}
 func (p *Pacemaker) AddNode() {}
 
 // do heartbeat
-func (p *Pacemaker) heartbeat() {}
+func (p *Pacemaker) heartbeat() {
+}
