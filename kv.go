@@ -3,7 +3,7 @@ package sdk
 
 // Key give out spanner sdk key
 type Key struct {
-	optype string
+	Value []byte
 }
 
 func WarpKey(rk, op string) *Key {
@@ -11,8 +11,10 @@ func WarpKey(rk, op string) *Key {
 }
 
 // Value defined a byte slice for transection sdk value field
-type Value []byte
-
+type Value struct {
+	Type Type
+	Value []byte
+}
 // KeyStore store all keys locally
 // TODO should be an interface
 type KeyStore struct {

@@ -1,4 +1,4 @@
-package happy
+package sdk
 
 import (
 	"errors"
