@@ -20,10 +20,14 @@ require (
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway v1.11.3 // indirect
 	github.com/jonboulle/clockwork v0.1.0 // indirect
+	github.com/juju/errors v0.0.0-20190930114154-d42613fe1ab9 // indirect
+	github.com/juju/loggo v0.0.0-20190526231331-6e530bcce5d8 // indirect
+	github.com/juju/testing v0.0.0-20191001232224-ce9dec17d28b // indirect
 	github.com/montanaflynn/stats v0.5.0 // indirect
 	github.com/pingcap/gofail v0.0.0-20181217135706-6a951c1e42c3 // indirect
 	github.com/pingcap/log v0.0.0-20191012051959-b742a5d432e9 // indirect
 	github.com/pingcap/pd v2.1.17+incompatible
+	github.com/pingcap/tidb v2.0.11+incompatible
 	github.com/prometheus/client_golang v1.2.1 // indirect
 	github.com/soheilhy/cmux v0.1.4 // indirect
 	github.com/tmc/grpc-websocket-proxy v0.0.0-20190109142713-0ad062ec5ee5 // indirect
@@ -34,5 +38,6 @@ require (
 	go.uber.org/zap v1.11.0
 	golang.org/x/time v0.0.0-20191024005414-555d28b269f0 // indirect
 	google.golang.org/grpc v1.24.0
+	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22 // indirect
 	sigs.k8s.io/yaml v1.1.0 // indirect
 )
