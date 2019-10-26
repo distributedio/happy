@@ -6,9 +6,6 @@ func init() {
 	initLogger()
 }
 
-// Value defined a byte slice for transection sdk value field
-type Value []byte
-
 // Transection defiend spanner transection interface, implemented by ro transection and rw transection
 type Transection interface {
 	Get(key *Key) (Value, error)
@@ -25,4 +22,7 @@ func Begin(ro bool) (Transection, error) {
 		return beginROTxn()
 	}
 	return beginRWTxn()
+}
+
+type transection struct {
 }
