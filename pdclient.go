@@ -5,6 +5,7 @@ import (
 	"os"
 
 	pd "github.com/pingcap/pd/client"
+	"go.uber.org/zap"
 )
 
 var pdClient pd.Client
@@ -19,4 +20,5 @@ func initPDclient(addrs []string) {
 	if err != nil {
 		os.Exit(0)
 	}
+	lg.Info("init pd client", zap.Strings("addrs", addrs))
 }

@@ -32,9 +32,6 @@ func warpKV(k Key, v Value) *Operation {
 	}
 }
 
-func NewKVStore() *KeyStore {
-}
-
 // KeyStore store all keys locally
 // TODO should be an interface
 type KeyStore struct {
@@ -42,25 +39,38 @@ type KeyStore struct {
 	store map[Key]Value
 }
 
+// NewKVStore return a local in memory kv storage
+func NewKVStore() *KeyStore {
+	return &KeyStore{
+		store: make(map[Key]Value),
+	}
+}
+
+// Set k v in local store
 func (s *KeyStore) Set(k Key, v Value) {
+	lg.Debug("call set kv store", zap.Stringer("key", k), zap.Stringer("value", v))
 	s.Lock()
 	s.store[k] = v
 	s.Unlock()
 }
 
+// Get k from local store
 func (s *KeyStore) Get(k Key) Value {
+	lg.Debug("call get kv store", zap.Stringer("key", k))
 	s.Lock()
 	defer s.Unlock()
 	return s.store[k]
 }
 
+// Delete k from local store
 func (s *KeyStore) Delete(k Key) {
-	lg.Debug("call delete in kv store", zap.Stringer("key", k))
+	lg.Debug("call delete kv store", zap.Stringer("key", k))
 	s.Lock()
 	delete(s.store, k)
 	s.Unlock()
 }
 
+// GetAllOperations return all k-v pairs store in kvstore in operation set
 func (s *KeyStore) GetAllOperations() []*Operation {
 	resultSet := make([]*Operation, 0)
 	s.Lock()
