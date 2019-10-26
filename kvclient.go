@@ -82,9 +82,18 @@ func (kv *tikvClient)Commit(ctx context.Context, txnID uint64, operations []Oper
 
 	for i := range operations {
 		op := &spannerpb.Operation{
-			Type: operations[i].Type,
 			Key: operations[i].Key,
 			Value: operations[i].Value,
+		}
+		switch operations[i].Type {
+		case OpPut:
+			op.Type = spannerpb.Type_Put
+		case OpDelete:
+			op.Type = spannerpb.Type_Delete
+		case OpRead:
+			op.Type = spannerpb.Type_Read
+		default:
+			return 0, errors.New("Unknown operation type")
 		}
 		req.Operations = append(req.Operations, op)
 	}
