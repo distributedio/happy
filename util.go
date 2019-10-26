@@ -11,8 +11,8 @@ import (
 )
 
 var (
-	Logger = zap.L()
-	level  = "debug"
+	lg    = zap.L()
+	level = "debug"
 
 	ErrInternal = errors.New("error internal")
 )

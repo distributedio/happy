@@ -1,9 +1,12 @@
 // package sdk defined spanner sdk for tikv transection
 package sdk
 
+var pdCluster []string
+
 // init gen logger and pd kv client
 func init() {
 	initLogger()
+	initPDclient(pdCluster)
 }
 
 // Transaction defiend spanner transection interface, implemented by ro transection and rw transection
@@ -24,5 +27,6 @@ func Begin(ro bool) (Transaction, error) {
 	return beginRWTxn()
 }
 
+// base transection op
 type transection struct {
 }
