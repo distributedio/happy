@@ -1,6 +1,11 @@
 // package sdk defined spanner sdk for tikv transection
 package sdk
 
+// init gen logger and pd kv client
+func init() {
+	initLogger()
+}
+
 // Value defined a byte slice for transection sdk value field
 type Value []byte
 
@@ -11,6 +16,7 @@ type Transection interface {
 	Delete(key *Key) error
 	Rollback() error
 	Commit() error
+	Close() error
 }
 
 // Begin start a transection with option wether it is a RO transection

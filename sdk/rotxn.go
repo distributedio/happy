@@ -16,3 +16,4 @@ func (txn *roTxn) Set(key *Key, value Value) error
 func (txn *roTxn) Delete(key *Key) error
 func (txn *roTxn) Rollback() error
 func (txn *roTxn) Commit() error
+func (txn *roTxn) Close() error
