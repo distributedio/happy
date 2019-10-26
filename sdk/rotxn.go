@@ -11,3 +11,8 @@ func beginROTxn() (*roTxn, error) {
 func (txn *roTxn) Get(key *Key) (Value, error) {
 	return nil, nil
 }
+
+func (txn *roTxn) Set(key *Key, value Value) error
+func (txn *roTxn) Delete(key *Key) error
+func (txn *roTxn) Rollback() error
+func (txn *roTxn) Commit() error
