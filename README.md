@@ -1,4 +1,4 @@
-# TiKV Spanner transection interface SDK
+# TiKV Spanner transaction interface SDK
 
 ## RO/RW Transection lifetime
 
@@ -7,7 +7,7 @@
 
 ### Get()
 * get TS if not exist
-* start heartbeat with transection nodes
+* start heartbeat with transaction nodes
 * call tikv get RO/RW with TS
 
 ### Set()/Delete()

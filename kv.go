@@ -1,4 +1,4 @@
-// package sdk defined spanner sdk for tikv transection
+// package sdk defined spanner sdk for tikv transaction
 package sdk
 
 import (
@@ -13,7 +13,7 @@ type Key string
 
 func (k Key) String() string { return string(k) }
 
-// Value defined a byte slice for transection sdk value field
+// Value defined a byte slice for transaction sdk value field
 type Value struct {
 	Type  Type
 	Value []byte
@@ -30,6 +30,9 @@ func warpKV(k Key, v Value) *Operation {
 		Key:   []byte(k),
 		Value: v.Value,
 	}
+}
+
+func NewKVStore() *KeyStore {
 }
 
 // KeyStore store all keys locally

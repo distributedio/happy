@@ -1,4 +1,4 @@
-// package sdk defined spanner sdk for tikv transection
+// package sdk defined spanner sdk for tikv transaction
 package sdk
 
 var pdCluster []string
@@ -9,7 +9,7 @@ func init() {
 	initPDclient(pdCluster)
 }
 
-// Transaction defiend spanner transection interface, implemented by ro transection and rw transection
+// Transaction defiend spanner transaction interface, implemented by ro transaction and rw transaction
 type Transaction interface {
 	Get(key []byte) ([]byte, error)
 	Set(key []byte, value []byte) error
@@ -19,7 +19,7 @@ type Transaction interface {
 	Close() error
 }
 
-// Begin start a transection with option wether it is a RO transection
+// Begin start a transaction with option wether it is a RO transaction
 func Begin(ro bool) (Transaction, error) {
 	if ro {
 		return beginROTxn()
@@ -27,6 +27,6 @@ func Begin(ro bool) (Transaction, error) {
 	return beginRWTxn()
 }
 
-// base transection op
-type transection struct {
+// base transaction op
+type transaction struct {
 }

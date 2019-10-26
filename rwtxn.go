@@ -1,4 +1,4 @@
-// package sdk defined spanner sdk for tikv transection
+// package sdk defined spanner sdk for tikv transaction
 package sdk
 
 type rwTxn struct {

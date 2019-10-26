@@ -1,4 +1,4 @@
-// package sdk defined spanner sdk for tikv transection
+// package sdk defined spanner sdk for tikv transaction
 package sdk
 
 import (
@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	transectionHeartBeatInterval = 1 // 1 second  per heartbeat
+	transactionHeartBeatInterval = 1 // 1 second  per heartbeat
 )
 
 // Pacemaker sent heartbeat to every perticapate nodes
@@ -29,7 +29,7 @@ func NewPacemaker(c context.Context, txnid uint64) *Pacemaker {
 	return &Pacemaker{
 		ctx:     c,
 		kvnodes: make([]*tikvClient, 0, 0xF),
-		tick:    time.Tick(time.Duration(transectionHeartBeatInterval) * time.Second),
+		tick:    time.Tick(time.Duration(transactionHeartBeatInterval) * time.Second),
 	}
 }
 
@@ -53,7 +53,7 @@ func (p *Pacemaker) heartbeat() {
 			for i, _ := range p.kvnodes {
 				// ttl shoud larger than hb interval, currently 2 times
 				lg.Debug("do heartbeat", zap.Uint64("txnid", p.txnid))
-				p.kvnodes[i].HeartBeat(p.ctx, p.txnid, uint64(2*transectionHeartBeatInterval))
+				p.kvnodes[i].HeartBeat(p.ctx, p.txnid, uint64(2*transactionHeartBeatInterval))
 			}
 			p.Unlock()
 		}
