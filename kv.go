@@ -24,8 +24,8 @@ func (v Value) String() string {
 }
 
 // warpKV to operation for pd client
-func warpKV(k Key, v Value) *Operation {
-	return &Operation{
+func warpKV(k Key, v Value) Operation {
+	return Operation{
 		Type:  v.Type,
 		Key:   []byte(k),
 		Value: v.Value,
@@ -46,33 +46,18 @@ func NewKVStore() *KeyStore {
 	}
 }
 
-// Set k v in local store
-func (s *KeyStore) Set(k Key, v Value) {
-	lg.Debug("call set kv store", zap.Stringer("key", k), zap.Stringer("value", v))
+func (s *KeyStore) SetOp(k, v []byte, op Type) {
 	s.Lock()
-	s.store[k] = v
-	s.Unlock()
-}
-
-// Get k from local store
-func (s *KeyStore) Get(k Key) Value {
-	lg.Debug("call get kv store", zap.Stringer("key", k))
-	s.Lock()
-	defer s.Unlock()
-	return s.store[k]
-}
-
-// Delete k from local store
-func (s *KeyStore) Delete(k Key) {
-	lg.Debug("call delete kv store", zap.Stringer("key", k))
-	s.Lock()
-	delete(s.store, k)
+	s.store[Key(k)] = Value{
+		Type:  OpPut,
+		Value: v,
+	}
 	s.Unlock()
 }
 
 // GetAllOperations return all k-v pairs store in kvstore in operation set
-func (s *KeyStore) GetAllOperations() []*Operation {
-	resultSet := make([]*Operation, 0)
+func (s *KeyStore) GetAllOperations() []Operation {
+	resultSet := make([]Operation, 0)
 	s.Lock()
 	defer s.Unlock()
 	for k, v := range s.store {
